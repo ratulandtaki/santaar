@@ -1,101 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <title id="movie-title">Loading...</title>
-    <meta name="description" content="Watch and download the latest movies and TV shows online for free." id="meta-description">
-    <meta name="keywords" content="movies, watch movies online, full movies, tv series, free movies, movie streaming">
-    <meta name="robots" content="index,follow">
-    <link rel="icon" type="image/png" href="/favicon.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title id="movie-title">Loading...</title>
+  <meta name="description" content="Watch and download the latest movies and TV shows online for free." id="meta-description">
+  <meta name="keywords" content="movies, watch movies online, full movies, tv series, free movies, movie streaming">
+  <meta name="robots" content="index,follow">
+  <link rel="icon" type="image/png" href="/favicon.png">
 
-    <!-- Open Graph Metadata (For Social Media Sharing) -->
-    <meta property="og:title" content="My Movie Hub - Watch Movies & TV Shows Online" id="og-title">
-    <meta property="og:description" content="Watch and download the latest movies and TV shows online for free." id="og-description">
-    <meta property="og:url" content="https://mastmahol1.blogspot.com/" id="og-url">
-    <meta property="og:image" content="https://i.ytimg.com/vi/Mts5a2RXqk4/maxresdefault.jpg" id="og-image">
-    <meta property="og:image:width" content="1110">
-    <meta property="og:image:height" content="592">
-    <meta property="og:image:type" content="image/jpeg">
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&ver=2.5.2" type="text/css" media="all">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link href="/templates/css/7excel.css" rel="stylesheet" type="text/css">
-    <link href="/templates/css/g-r.css" rel="stylesheet" type="text/css">
-    <link href="/templates/css/gsm-r.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #0f0f0f;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
 
-    <script>
-        const apiKey = "4c71d87f1fdfa3ae55d8f391a86ae8c6"; // Your TMDb API Key
-        const baseUrl = "https://api.themoviedb.org/3";
+    header {
+      padding: 10px 20px;
+      background: #1f1f1f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const movieId = urlParams.get("id");
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
 
-            if (movieId) {
-                fetch(`${baseUrl}/movie/${movieId}?api_key=${apiKey}`)
-                    .then(response => response.json())
-                    .then(movie => {
-                        document.title = movie.title;
-                        document.getElementById("movie-title").innerText = movie.title;
-                        document.getElementById("meta-description").setAttribute("content", movie.overview);
-                        document.getElementById("og-title").setAttribute("content", movie.title);
-                        document.getElementById("og-description").setAttribute("content", movie.overview);
-                        document.getElementById("og-url").setAttribute("content", window.location.href);
-                        document.getElementById("og-image").setAttribute("content", `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-                        document.getElementById("movie-details").innerHTML = `
-                            <h1>${movie.title}</h1>
-                            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
-                            <p>${movie.overview}</p>
-                            <a href="https://benefitanna.com/rbim40gvz?key=cca485d84ff8e5a7674c00dacc090a59" target="_blank">
-                                <button class="download-btn">Download</button>
-                            </a>
-                        `;
-                    })
-                    .catch(error => console.error("Error fetching movie details:", error));
-            }
-        });
-    </script>
+    .search-input {
+      padding: 8px 15px;
+      border-radius: 25px;
+      border: none;
+      font-size: 14px;
+    }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            text-align: center;
-        }
+    .filter-select {
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: none;
+    }
 
-        .download-btn {
-            padding: 10px 20px;
-            border: none;
-            background: linear-gradient(45deg, #ff512f, #dd2476);
-            color: white;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    #movie-details {
+      padding: 20px;
+      text-align: center;
+    }
 
-        .download-btn:hover {
-            background: linear-gradient(45deg, #dd2476, #ff512f);
-            transform: scale(1.05);
-        }
+    .movie-poster {
+      width: 90%;
+      max-width: 400px;
+      border-radius: 10px;
+    }
 
-        img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-    </style>
+    .buttons {
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      margin: 10px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 6px 20px rgba(255, 75, 43, 0.6);
+    }
+
+    .info-section {
+      margin-top: 20px;
+      font-size: 0.95rem;
+    }
+
+    .info-section span {
+      display: block;
+      margin: 6px 0;
+    }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .movie-card {
+      background-color: #1c1c1c;
+      padding: 10px;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .movie-card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-box {
+        width: 100%;
+        margin-top: 10px;
+        justify-content: space-between;
+      }
+
+      .search-input {
+        width: 60%;
+      }
+
+      .filter-select {
+        width: 35%;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1 id="movie-title">Loading...</h1>
+    <div class="search-box">
+      <input type="text" class="search-input" placeholder="Search movies...">
+      <select class="filter-select">
+        <option value="">Genre</option>
+        <option value="action">Action</option>
+        <option value="comedy">Comedy</option>
+        <option value="drama">Drama</option>
+        <option value="horror">Horror</option>
+      </select>
+    </div>
+  </header>
 
-    <div id="movie-details">Loading...</div>
+  <div id="movie-details"></div>
 
+  <section class="movie-grid" id="related-movies"></section>
+
+  <script>
+    const apiKey = "4c71d87f1fdfa3ae55d8f391a86ae8c6";
+    const baseUrl = "https://api.themoviedb.org/3";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const movieId = urlParams.get("id");
+
+      if (movieId) {
+        fetch(`${baseUrl}/movie/${movieId}?api_key=${apiKey}&append_to_response=credits`)
+          .then(res => res.json())
+          .then(movie => {
+            document.title = movie.title;
+            document.getElementById("movie-title").innerText = movie.title;
+
+            document.getElementById("movie-details").innerHTML = `
+              <img class="movie-poster" src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+              <div class="buttons">
+                <a href="https://benefitanna.com/rbim40gvz?key=cca485d84ff8e5a7674c00dacc090a59" target="_blank" class="btn">⬇️ Download</a>
+                <a href="#" class="btn">▶️ Watch Now</a>
+              </div>
+              <div class="info-section">
+                <span><strong>Release Date:</strong> ${movie.release_date}</span>
+                <span><strong>Rating:</strong> ${movie.vote_average} / 10</span>
+                <span><strong>Genres:</strong> ${movie.genres.map(g => g.name).join(', ')}</span>
+                <span><strong>Cast:</strong> ${movie.credits.cast.slice(0, 5).map(a => a.name).join(', ')}</span>
+              </div>
+            `;
+
+            fetch(`${baseUrl}/movie/popular?api_key=${apiKey}`)
+              .then(res => res.json())
+              .then(data => {
+                document.getElementById("related-movies").innerHTML = data.results.slice(0, 12).map(m => `
+                  <div class="movie-card">
+                    <a href="?id=${m.id}">
+                      <img src="https://image.tmdb.org/t/p/w300${m.poster_path}" alt="${m.title}">
+                      <div class="play-overlay"><i class="fas fa-play"></i></div>
+                    </a>
+                    <small>${m.title}</small>
+                  </div>
+                `).join('');
+              });
+          });
+      }
+    });
+  </script>
 </body>
 </html>
