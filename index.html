@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>My Movie Hub - Watch Movies & TV Shows Online</title>
+        <meta name="description" content="Watch and download the latest movies and TV shows online for free.">
+        <meta name="keywords" content="movies, watch movies online, full movies, tv series, free movies, movie streaming">
+        <meta name="robots" content="index,follow">
+        <link rel="icon" type="image/png" href="/favicon.png">
+        <meta property="og:title" content="My Movie Hub - Watch Movies & TV Shows Online">
+        <meta property="og:description" content="Watch and download the latest movies and TV shows online for free.">
+        <meta property="og:url" content="https://mastmahol1.blogspot.com/">
+        <meta property="og:image" content="https://i.ytimg.com/vi/Mts5a2RXqk4/maxresdefault.jpg">
+        <meta property="og:image:width" content="1110">
+        <meta property="og:image:height" content="592">
+        <meta property="og:image:type" content="image/jpeg">
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="canonical" href="https://mastmahol1.blogspot.com/">
+        <link rel="stylesheet" id="google-fonts-css" href="https://fonts.googleapis.com/css?family=Quicksand%3A300%2C400%2C500%2C700&amp;ver=2.5.2" type="text/css" media="all">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <link href="/templates/css/7excel.css" rel="stylesheet" type="text/css">
+        <link href="/templates/css/g-r.css" rel="stylesheet" type="text/css">
+        <link href="/templates/css/gsm-r.css" rel="stylesheet" type="text/css">
+        <link rel='stylesheet' href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    </head>
+    <title>My Movie Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px;
+            background-color: #1e1e1e;
+        }
+
+        .search-box {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 20px;
+            border: 1px solid #ff512f;
+            background-color: #1e1e1e;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+            width: 200px;
+        }
+
+        .search-box:focus {
+            box-shadow: 0 0 10px rgba(255, 81, 47, 0.8);
+            border: 1px solid #dd2476;
+        }
+
+        .search-btn {
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 20px;
+            border: none;
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-left: 5px;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(45deg, #dd2476, #ff512f);
+            transform: scale(1.05);
+        }
+
+        .movie-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .movie-card {
+            position: relative;
+            width: 200px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .movie-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 81, 47, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .play-button:hover {
+            background: rgba(255, 81, 47, 1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .movie-buttons {
+            margin-top: 10px;
+        }
+
+        .watch-btn, .download-btn {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .watch-btn {
+            background-color: #ff512f;
+            color: white;
+        }
+
+        .download-btn {
+            background-color: #dd2476;
+            color: white;
+        }
+
+        .watch-btn:hover {
+            background-color: #dd2476;
+        }
+
+        .download-btn:hover {
+            background-color: #ff512f;
+        }
+    </style>
+    <script>
+        const apiKey = "4c71d87f1fdfa3ae55d8f391a86ae8c6"; // Your TMDb API Key
+        const baseUrl = "https://api.themoviedb.org/3";
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchMovies("trending", "trending/movie/week");
+            fetchMovies("popular", "movie/popular");
+            fetchMovies("latest", "movie/now_playing");
+        });
+
+        function fetchMovies(section, endpoint) {
+            fetch(`${baseUrl}/${endpoint}?api_key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayMovies(section, data.results);
+                })
+                .catch(error => console.error("Error fetching movies:", error));
+        }
+
+        function displayMovies(section, movies) {
+            const container = document.getElementById(section);
+            container.innerHTML = "";
+
+            movies.forEach(movie => {
+                const watchLink = `movie-details.html?id=${movie.id}`;
+                const downloadLink = "";
+                const movieCard = `
+                    <div class="movie-card">
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+                        <button class="play-button" onclick="window.location.href='${watchLink}'">▶</button>
+                        <h4>${movie.title}</h4>
+                        <div class="movie-buttons">
+                            <a href="${watchLink}" target="_blank"><button class="watch-btn">Watch Now</button></a>
+                            <a href="${downloadLink}" target="_blank"><button class="download-btn">Download</button></a>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += movieCard;
+            });
+        }
+
+        function searchMovie() {
+            const query = document.getElementById("search-box").value;
+            if (!query.trim()) {
+                alert("Enter a movie name!");
+                return;
+            }
+
+            fetch(`${baseUrl}/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayMovies("trending", data.results);
+                })
+                .catch(error => console.error("Error fetching search results:", error));
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Navbar with Search -->
+    <div class="navbar">
+        <input type="text" id="search-box" class="search-box" placeholder="Search movies..." />
+        <button class="search-btn" onclick="searchMovie()">Search</button>
+    </div>
+
+    <h1>My Movie Hub</h1>
+
+    <h2>Trending Movies</h2>
+    <div id="trending" class="movie-container"></div>
+
+    <h2>Popular Movies</h2>
+    <div id="popular" class="movie-container"></div>
+
+    <h2>Latest Movies</h2>
+    <div id="latest" class="movie-container"></div>
+
+
+</body>
+</html>
